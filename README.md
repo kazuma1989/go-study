@@ -78,6 +78,86 @@ func main() {
 ```
 
 
+### 新しいコマンドを作るために、ファイル分け
+
+`main.go`
+
+```diff
+- func walkDir(dir string) error {
+- 	files, err := ioutil.ReadDir(dir)
+- 	if err != nil {
+- 		return err
+- 	}
+- 
+- 	for _, file := range files {
+- 		if strings.HasPrefix(file.Name(), ".") {
+- 			continue
+- 		}
+- 
+- 		fmt.Println(filepath.Join(dir, file.Name()))
+- 
+- 		if file.IsDir() {
+- 			err := walkDir(filepath.Join(dir, file.Name()))
+- 			if err != nil {
+- 				return err
+- 			}
+- 		}
+- 	}
+- 
+- 	return nil
+- }
+
+func main() {
+- 	err := walkDir("./")
++ 	err := WalkDir("./")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+新しいファイル `ls.go`
+
+```diff
+  package main
+  
+  import (
+  	"fmt"
+  	"io/ioutil"
+  	"path/filepath"
+  	"strings"
+  )
+  
++ // WalkDir はディレクトリの中身を再帰的にリストアップします。
+- func walkDir(dir string) error {
++ func WalkDir(dir string) error {
+  	files, err := ioutil.ReadDir(dir)
+  	if err != nil {
+  		return err
+  	}
+  
+  	for _, file := range files {
+  		if strings.HasPrefix(file.Name(), ".") {
+  			continue
+  		}
+  
+  		fmt.Println(filepath.Join(dir, file.Name()))
+  
+  		if file.IsDir() {
+- 			err := walkDir(filepath.Join(dir, file.Name()))
++ 			err := WalkDir(filepath.Join(dir, file.Name()))
+  			if err != nil {
+  				return err
+  			}
+  		}
+  	}
+  
+  	return nil
+  }
+```
+
+実行は `go run *.go` に変化。
+
 
 ### `curl`
 
