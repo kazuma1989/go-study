@@ -2,7 +2,8 @@
 
 ## インストール
 
-https://golang.org/doc/install#install
+- https://golang.org/doc/install#install
+- https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go
 
 
 ## CLI ツールを作る
@@ -115,7 +116,8 @@ func main() {
  }
 ```
 
-新しいファイル `ls.go`
+新しいファイル `ls.go`.
+処理には変化なし。
 
 ```diff
  package main
