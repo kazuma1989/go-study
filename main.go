@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	err := WalkDir("./")
+	err := walkDir("./")
 	if err != nil {
 		log.Fatal(err)
 	}

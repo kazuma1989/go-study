@@ -7,8 +7,7 @@ import (
 	"strings"
 )
 
-// WalkDir はディレクトリの中身を再帰的にリストアップします。
-func WalkDir(dir string) error {
+func walkDir(dir string) error {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return err
@@ -22,7 +21,7 @@ func WalkDir(dir string) error {
 		fmt.Println(filepath.Join(dir, file.Name()))
 
 		if file.IsDir() {
-			err := WalkDir(filepath.Join(dir, file.Name()))
+			err := walkDir(filepath.Join(dir, file.Name()))
 			if err != nil {
 				return err
 			}

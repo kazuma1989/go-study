@@ -108,8 +108,7 @@ func main() {
 -}
  
  func main() {
--	err := walkDir("./")
-+	err := WalkDir("./")
+ 	err := walkDir("./")
  	if err != nil {
  		log.Fatal(err)
  	}
@@ -128,9 +127,7 @@ func main() {
  	"strings"
  )
  
-+// WalkDir はディレクトリの中身を再帰的にリストアップします。
--func walkDir(dir string) error {
-+func WalkDir(dir string) error {
+ func walkDir(dir string) error {
  	files, err := ioutil.ReadDir(dir)
  	if err != nil {
  		return err
@@ -144,8 +141,7 @@ func main() {
  		fmt.Println(filepath.Join(dir, file.Name()))
  
  		if file.IsDir() {
--			err := walkDir(filepath.Join(dir, file.Name()))
-+			err := WalkDir(filepath.Join(dir, file.Name()))
+ 			err := walkDir(filepath.Join(dir, file.Name()))
  			if err != nil {
  				return err
  			}
