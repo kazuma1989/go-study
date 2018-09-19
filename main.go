@@ -2,10 +2,23 @@ package main
 
 import (
 	"log"
+	"os"
 )
 
 func main() {
-	err := curl("http://example.com")
+	args := os.Args[1:]
+	l := len(args)
+	var url string
+	switch {
+	case l == 0:
+		log.Fatal("Need 1 argument.")
+	case l == 1:
+		url = args[0]
+	case l >= 2:
+		log.Fatal("Too many arguments.")
+	}
+
+	err := curl(url)
 	if err != nil {
 		log.Fatal(err)
 	}
