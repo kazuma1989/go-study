@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	err := walkDir("./")
+	err := curl("http://example.com")
 	if err != nil {
 		log.Fatal(err)
 	}

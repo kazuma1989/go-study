@@ -119,44 +119,85 @@ func main() {
 新しいファイル `ls.go`.
 処理には変化なし。
 
-```diff
- package main
- 
- import (
- 	"fmt"
- 	"io/ioutil"
- 	"path/filepath"
- 	"strings"
- )
- 
- func walkDir(dir string) error {
- 	files, err := ioutil.ReadDir(dir)
- 	if err != nil {
- 		return err
- 	}
- 
- 	for _, file := range files {
- 		if strings.HasPrefix(file.Name(), ".") {
- 			continue
- 		}
- 
- 		fmt.Println(filepath.Join(dir, file.Name()))
- 
- 		if file.IsDir() {
- 			err := walkDir(filepath.Join(dir, file.Name()))
- 			if err != nil {
- 				return err
- 			}
- 		}
- 	}
- 
- 	return nil
- }
+```go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"path/filepath"
+	"strings"
+)
+
+func walkDir(dir string) error {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		if strings.HasPrefix(file.Name(), ".") {
+			continue
+		}
+
+		fmt.Println(filepath.Join(dir, file.Name()))
+
+		if file.IsDir() {
+			err := walkDir(filepath.Join(dir, file.Name()))
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
 ```
 
 実行は `go run *.go` に変化。
 
 
 ### `curl`
+
+`main.go`
+
+```diff
+ func main() {
+-	err := walkDir("./")
++	err := curl("http://example.com")
+ 	if err != nil {
+ 		log.Fatal(err)
+ 	}
+ }
+```
+
+新しいファイル `curl.go`
+
+```go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+func curl(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(body))
+
+	return nil
+}
+```
+
 
 ### `jq`
