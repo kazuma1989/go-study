@@ -252,7 +252,7 @@ $ echo '{"foo":"bar"}' | go run *.go https://jsonplaceholder.typicode.com/todos
 
 ### `jq`
 
-ただ JSON をパースするだけ
+#### ただ JSON をパースするだけ
 
 ```diff
 +	if input, err := ioutil.ReadAll(os.Stdin); err != nil {
@@ -300,3 +300,16 @@ func jq(path string, input []byte) error {
 $ cat sample.json | go run *.go dummy
 map[foo:bar]
 ```
+
+#### JSON 文字列に戻す
+
+```diff
++	b, err := json.Marshal(value)
++	if err != nil {
++		return err
++	}
++
+-	fmt.Println(value)
++	fmt.Println(string(b))
+```
+
