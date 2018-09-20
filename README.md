@@ -218,5 +218,36 @@ func curl(url string) error {
 }
 ```
 
+POST できるように変更
+
+```diff
+-func curl(url string) error {
++func curl(url string, input io.Reader) error {
+-	resp, err := http.Get(url)
++	resp, err := http.Post(url, "application/json", input)
+ 	if err != nil {
+ 		return err
+ 	}
+ 	defer resp.Body.Close()
+```
+
+```diff
+-	err := curl(url)
++	err := curl(url, os.Stdin)
+ 	if err != nil {
+ 		log.Fatal(err)
+ 	}
+```
+
+パイプで POST ボディを渡す
+
+```bash
+$ echo '{"foo":"bar"}' | go run *.go https://jsonplaceholder.typicode.com/todos
+{
+  "foo": "bar",
+  "id": 201
+}
+```
+
 
 ### `jq`

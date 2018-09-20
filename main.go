@@ -18,7 +18,7 @@ func main() {
 		log.Fatal("Too many arguments.")
 	}
 
-	err := curl(url)
+	err := curl(url, os.Stdin)
 	if err != nil {
 		log.Fatal(err)
 	}
