@@ -303,7 +303,28 @@ map[foo:bar]
 
 #### JSON 文字列に戻す
 
+`sample.json`
+
 ```diff
+ {
+   "foo": "bar",
++  "baz": {
++    "qux": "quux"
++  }
+ }
+```
+
+`jq.go`
+
+```diff
+ func jq(path string, input []byte) error {
+-	var value map[string]string
++	var value map[string]interface{}
+ 	err := json.Unmarshal(input, &value)
+ 	if err != nil {
+ 		return err
+ 	}
+ 
 +	b, err := json.Marshal(value)
 +	if err != nil {
 +		return err
@@ -311,5 +332,11 @@ map[foo:bar]
 +
 -	fmt.Println(value)
 +	fmt.Println(string(b))
+	return nil
+ }
 ```
 
+#### 必要な部分だけ取り出す
+
+```diff
+```

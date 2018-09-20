@@ -6,7 +6,7 @@ import (
 )
 
 func jq(path string, input []byte) error {
-	var value map[string]string
+	var value map[string]interface{}
 	err := json.Unmarshal(input, &value)
 	if err != nil {
 		return err
