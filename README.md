@@ -254,6 +254,8 @@ $ echo '{"foo":"bar"}' | go run *.go https://jsonplaceholder.typicode.com/todos
 
 #### ただ JSON をパースするだけ
 
+`main.go`
+
 ```diff
 +	if input, err := ioutil.ReadAll(os.Stdin); err != nil {
 +		log.Fatal(err)
@@ -338,5 +340,46 @@ map[foo:bar]
 
 #### 必要な部分だけ取り出す
 
+`main.go`
+
 ```diff
+ func main() {
+ 	args := os.Args[1:]
+ 	l := len(args)
+-	var url string
++	var path string
+ 	switch {
+ 	case l == 0:
+ 		log.Fatal("Need 1 argument.")
+ 	case l == 1:
+-		url = args[0]
++		path = args[0]
+ 	case l >= 2:
+ 		log.Fatal("Too many arguments.")
+ 	}
+ 
+ 	if input, err := ioutil.ReadAll(os.Stdin); err != nil {
+ 		log.Fatal(err)
+ 	} else {
+-		err := jq(url, input)
++		err := jq(path, input)
+ 		if err != nil {
+ 			log.Fatal(err)
+ 		}
+ 	}
+ }
+```
+
+`jq.go`
+
+```diff
+ func jq(path string, input []byte) error {
+ 	var value map[string]interface{}
+ 	err := json.Unmarshal(input, &value)
+ 	if err != nil {
+ 		return err
+ 	}
+ 
+-	b, err := json.Marshal(value)
++	b, err := json.Marshal(value[path])
 ```

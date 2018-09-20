@@ -12,7 +12,7 @@ func jq(path string, input []byte) error {
 		return err
 	}
 
-	b, err := json.Marshal(value)
+	b, err := json.Marshal(value[path])
 	if err != nil {
 		return err
 	}
