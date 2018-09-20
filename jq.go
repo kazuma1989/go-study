@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/oliveagle/jsonpath"
 )
 
 func jq(path string, input []byte) error {
@@ -12,7 +14,12 @@ func jq(path string, input []byte) error {
 		return err
 	}
 
-	b, err := json.Marshal(value[path])
+	filtered, err := jsonpath.JsonPathLookup(value, path)
+	if err != nil {
+		return err
+	}
+
+	b, err := json.Marshal(filtered)
 	if err != nil {
 		return err
 	}

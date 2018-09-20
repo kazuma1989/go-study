@@ -383,3 +383,44 @@ map[foo:bar]
 -	b, err := json.Marshal(value)
 +	b, err := json.Marshal(value[path])
 ```
+
+#### 必要な部分だけ取り出す (with JSON Path)
+
+ライブラリーを入手する
+
+```bash
+$ go get github.com/oliveagle/jsonpath
+```
+
+`jq.go`
+
+```diff
+ import (
+ 	"encoding/json"
+ 	"fmt"
++
++	"github.com/oliveagle/jsonpath"
+ )
+ 
+ func jq(path string, input []byte) error {
+ 	var value map[string]interface{}
+ 	err := json.Unmarshal(input, &value)
+ 	if err != nil {
+ 		return err
+ 	}
+ 
++	filtered, err := jsonpath.JsonPathLookup(value, path)
++	if err != nil {
++		return err
++	}
++
+-	b, err := json.Marshal(value[path])
++	b, err := json.Marshal(filtered)
+```
+
+「`baz` の中の `qux` 項目を取得する」ということが可能。
+
+```bash
+$ cat sample.json | go run *.go '$.baz.qux'
+"quux"
+```
