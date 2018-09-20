@@ -251,3 +251,52 @@ $ echo '{"foo":"bar"}' | go run *.go https://jsonplaceholder.typicode.com/todos
 
 
 ### `jq`
+
+ただ JSON をパースするだけ
+
+```diff
++	if input, err := ioutil.ReadAll(os.Stdin); err != nil {
++		log.Fatal(err)
++	} else {
+-		err := curl(url, os.Stdin)
++		err := jq(url, input)
+ 		if err != nil {
+ 			log.Fatal(err)
+ 		}
++	}
+```
+
+新しいファイル `jq.go`
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+func jq(path string, input []byte) error {
+	var value map[string]string
+	err := json.Unmarshal(input, &value)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(value)
+	return nil
+}
+```
+
+`sample.json`
+
+```json
+{
+  "foo": "bar"
+}
+```
+
+```bash
+$ cat sample.json | go run *.go dummy
+map[foo:bar]
+```

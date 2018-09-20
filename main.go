@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -18,8 +19,12 @@ func main() {
 		log.Fatal("Too many arguments.")
 	}
 
-	err := curl(url, os.Stdin)
-	if err != nil {
+	if input, err := ioutil.ReadAll(os.Stdin); err != nil {
 		log.Fatal(err)
+	} else {
+		err := jq(url, input)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
